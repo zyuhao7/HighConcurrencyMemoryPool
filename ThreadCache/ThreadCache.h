@@ -16,5 +16,10 @@ private:
     FreeList _freeLists[NFREELIST];
 };
 
-// TLS thread local storage
-// static _declspec(thread) ThreadCache *pTLSThreadCache = nullptr;
+#if defined(_WIN32) || defined(_WIN64)
+#define TLS_STORAGE __declspec(thread)
+#else
+#define TLS_STORAGE __thread // 或 thread_local
+#endif
+
+static TLS_STORAGE ThreadCache *pTLSThreadCache = nullptr;
